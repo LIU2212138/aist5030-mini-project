@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual env
+.venv/
+venv/
+env/
+
+# HuggingFace / caches
+.cache/
+hf_cache/
+datasets_cache/
+**/.cache/
+
+# Outputs (do not commit checkpoints/logs)
+outputs/checkpoints/
+outputs/logs/
+runs/
+
+# Large model files
+*.bin
+*.pt
+*.pth
+*.safetensors
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

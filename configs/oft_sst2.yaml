@@ -1,0 +1,33 @@
+model_name: "Qwen/Qwen2.5-1.5B"
+dataset_name: "sst2"
+
+max_length: 256
+# train_samples: 20000
+train_samples: 5000
+
+eval_samples: 800
+seed: 42
+
+lr: 2.0e-4
+epochs: 1
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 8
+per_device_eval_batch_size: 8
+warmup_ratio: 0.03
+weight_decay: 0.0
+
+fp16: true
+gradient_checkpointing: true
+
+oft_block_size: 32
+target_modules:
+  - "q_proj"
+  - "k_proj"
+  - "v_proj"
+  - "o_proj"
+  - "up_proj"
+  - "down_proj"
+  - "gate_proj"
+
+output_dir: "outputs/checkpoints/oft_sst2"
+log_dir: "outputs/logs/oft_sst2"

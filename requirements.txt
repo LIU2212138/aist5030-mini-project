@@ -1,0 +1,10 @@
+torch
+transformers
+datasets
+evaluate
+peft
+tqdm
+tensorboard
+scikit-learn
+sentencepiece
+matplotlib
