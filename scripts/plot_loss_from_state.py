@@ -17,12 +17,11 @@ def main():
     with open(args.state, "r", encoding="utf-8") as f:
         st = json.load(f)
 
-    # transformers 会把日志放在 log_history 里
     hist = st.get("log_history", [])
     steps = []
     losses = []
     for item in hist:
-        # 只取训练 loss（不是 eval_loss）
+        # 只取训练 loss
         if "loss" in item and "step" in item and "eval_loss" not in item:
             steps.append(item["step"])
             losses.append(item["loss"])

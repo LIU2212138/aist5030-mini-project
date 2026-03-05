@@ -54,7 +54,6 @@ def main():
     except Exception as e:
         log(f"[WARN] cannot query HfApi endpoint: {e}")
 
-    # Print cache locations (helps debug locks / wrong cache)
     log(f"[INFO] HF_HOME={os.environ.get('HF_HOME')}")
     log(f"[INFO] TRANSFORMERS_CACHE={os.environ.get('TRANSFORMERS_CACHE')}")
     log(f"[INFO] default cache (~/.cache/huggingface) exists={os.path.exists(os.path.expanduser('~/.cache/huggingface'))}")

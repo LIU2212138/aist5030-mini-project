@@ -55,7 +55,7 @@ def preprocess(tokenizer, max_length: int):
         for ids_full, ids_prompt in zip(tok_full["input_ids"], tok_prompt["input_ids"]):
             # labels 长度必须 == input_ids 长度
             lab = [-100] * len(ids_full)
-            # prompt 部分 mask 掉，只让 answer 部分产生 loss
+            # prompt 部分遮掉，answer 部分产生 loss
             start = min(len(ids_prompt), len(ids_full))
             for j in range(start, len(ids_full)):
                 lab[j] = ids_full[j]
@@ -63,8 +63,6 @@ def preprocess(tokenizer, max_length: int):
 
         tok_full["labels"] = labels
 
-        # attention_mask 必须存在（tokenizer 默认会给）
-        # 这里确保字段齐全
         if "attention_mask" not in tok_full:
             tok_full["attention_mask"] = [[1] * len(x) for x in tok_full["input_ids"]]
 
@@ -109,7 +107,6 @@ def main():
     model_name = cfg["model_name"]
     max_length = int(cfg.get("max_length", 256))
 
-    # 国内镜像（你也可以在 shell 里 export HF_ENDPOINT）
     os.environ.setdefault("HF_ENDPOINT", os.environ.get("HF_ENDPOINT", ""))
 
     tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True, trust_remote_code=True)
@@ -125,9 +122,8 @@ def main():
 
     if cfg.get("gradient_checkpointing", True):
         model.gradient_checkpointing_enable()
-        model.config.use_cache = False  # 训练时建议关 cache
+        model.config.use_cache = False 
 
-    # OFT 配置：只用 oft_block_size，避免与 r 冲突
     oft_cfg = OFTConfig(
         oft_block_size=int(cfg.get("oft_block_size", 32)),
         target_modules=cfg.get("target_modules", ["q_proj", "k_proj", "v_proj", "o_proj"]),
@@ -145,10 +141,8 @@ def main():
     train_ds = train_ds.map(preprocess(tokenizer, max_length), batched=True, remove_columns=train_ds.column_names)
     eval_ds = eval_ds.map(preprocess(tokenizer, max_length), batched=True, remove_columns=eval_ds.column_names)
 
-    # 自定义 collator：彻底解决 labels padding 兼容问题
     data_collator = CausalLMDataCollator(pad_token_id=tokenizer.pad_token_id)
 
-    # ---- TrainingArguments compatibility (transformers versions differ) ----
     common_kwargs = dict(
         output_dir=cfg.get("output_dir", "outputs/checkpoints/oft_sst2"),
         logging_dir=cfg.get("log_dir", "outputs/logs/oft_sst2"),
@@ -165,7 +159,7 @@ def main():
         save_total_limit=2,
         report_to=["tensorboard"],
         remove_unused_columns=False,
-        dataloader_num_workers=0,  # 先稳定跑通；之后可改回 2
+        dataloader_num_workers=2, 
     )
 
     try:

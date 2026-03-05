@@ -14,6 +14,7 @@ Trainable parameters (OFT only): **7,888,384 / 1,551,602,688 (0.51%)**
 - `scripts/`: training / evaluation / plotting scripts
 - `configs/`: experiment configs
 - `figures/`: loss curve and accuracy comparison figures
+- `report.pdf`: project report
 
 ## Environment
 - Single GPU: RTX 4070s
@@ -23,6 +24,7 @@ Trainable parameters (OFT only): **7,888,384 / 1,551,602,688 (0.51%)**
 ## Setup
 ```bash
 pip install -r requirements.txt
+```
 
 If you are in mainland China, you may need a HuggingFace mirror:
 ```
@@ -46,6 +48,6 @@ python scripts/plot_loss_from_state.py --state outputs/checkpoints/oft_sst2/chec
 python scripts/plot_accuracy.py --before <the origin acc> --after <the finetuned acc> --out figures/acc_comparison.png
 ```
 
-Notes
+## Notes
 Loss is computed only on the answer tokens (prompt tokens are masked with -100).
 Model checkpoints are NOT committed to this repo (see .gitignore).

@@ -22,7 +22,7 @@ def main():
     plt.ylabel("Accuracy")
     plt.title(args.title)
 
-    # 在柱子顶上标注数值
+    # 柱子顶上标注数值
     for i, v in enumerate(values):
         plt.text(i, v + 0.01, f"{v:.4f}", ha="center", va="bottom")
 
